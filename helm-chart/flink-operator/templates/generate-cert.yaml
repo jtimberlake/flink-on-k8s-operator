@@ -119,6 +119,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   annotations:
+    "helm.sh/hook": post-install
   name: cert-job
   namespace: {{ .Values.flinkOperatorNamespace.name }}
   labels:
@@ -136,7 +137,7 @@ spec:
         - "/bin/bash"
         - "-ec"
         - |
-          ls /cert_to_create  
+          ls /cert_to_create
           for cert in /cert_to_create/*;
             do
               bash $cert;
