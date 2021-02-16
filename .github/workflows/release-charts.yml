@@ -1,0 +1,31 @@
+name: Release charts
+
+on:
+  push:
+    branches:
+      - master
+    tags-ignore:
+      - '**'
+
+jobs:
+  release-charts:
+    name: Release charts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Execute command
+        env:
+          CH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_REPOSITORY_URL: https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          GIT_USERNAME: ${{ github.repository_owner }}
+          GIT_EMAIL: "${{ github.actor }}@users.noreply.github.com"
+          GIT_REPOSITORY_NAME: ${{ github.event.repository.name }}
+        run: |
+          sudo chown -R $(id -u):$(id -g) .circleci/
+          chmod +x .circleci/install_tools.sh
+          chmod +x .circleci/release.sh
+          .circleci/install_tools.sh
+          .circleci/release.sh
