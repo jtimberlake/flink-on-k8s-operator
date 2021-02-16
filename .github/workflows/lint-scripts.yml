@@ -1,0 +1,20 @@
+name: Lint shell scripts
+
+on:
+  push:
+    branches:
+      - master
+    tags-ignore:
+      - '**'
+
+jobs:
+  lint-scripts:
+    name: Lint scripts
+    runs-on: ubuntu-latest
+    container:
+      image: koalaman/shellcheck-alpine:v0.7.0
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Execute lint scripts
+        run: shellcheck -x .circleci/*.sh
